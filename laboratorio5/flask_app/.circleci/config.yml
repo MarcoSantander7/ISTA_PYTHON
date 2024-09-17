@@ -1,0 +1,30 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: Instalar dependencias
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - run:
+          name: Ejecutar Black
+          command: |
+            . venv/bin/activate
+            black --check .
+      - run:
+          name: Ejecutar Mypy
+          command: |
+            . venv/bin/activate
+            mypy app.py
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
